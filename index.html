@@ -2,192 +2,236 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Player Management System</title>
+<title>Player Management System - Broken</title>
 
 <style>
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #f1f3f6;
-    color: #222;
+    background: #eef1f5;
+    overflow-x: hidden;
 }
 
+/* header bug */
 .header {
-    background: #1f2937;
-    color: #fff;
-    padding: 12px 20px;
+    background: #20232a;
+    color: white;
+    padding: 12px;
     font-size: 18px;
+    width: 102%; /* overflow bug */
+    position: relative;
+    z-index: 5;
+    animation: jitter 0.2s infinite;
 }
 
+/* layout breaking */
 .container {
     display: flex;
 }
 
-/* sidebar */
+/* sidebar glitch */
 .sidebar {
     width: 220px;
     background: #2f3542;
     color: #ccc;
     height: 100vh;
     padding: 10px;
+    overflow: hidden;
+    animation: shift 5s infinite;
 }
 
 .sidebar div {
     padding: 8px;
-    cursor: pointer;
+}
+
+.sidebar div.flicker {
+    animation: flicker 1.5s infinite;
 }
 
 .sidebar div:hover {
     background: #3d4450;
 }
 
-/* main */
+/* main content */
 .main {
     flex: 1;
-    padding: 20px;
+    padding: 15px;
 }
 
-/* cards */
+/* cards breaking */
 .card {
     background: white;
     padding: 15px;
     margin-bottom: 15px;
-    border-radius: 6px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transform: skewX(-1deg);
+    animation: subtleShift 10s infinite;
 }
 
-/* player table */
+/* table breaking */
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
 td, th {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
 }
 
-.status-ok {
-    color: green;
-}
-
-.status-bad {
+/* text overlap bug */
+.overlap {
+    position: absolute;
+    top: 120px;
+    left: 300px;
     color: red;
     font-weight: bold;
+    opacity: 0.7;
+    font-size: 16px;
 }
 
-/* error log */
+/* flicker bug */
+.flicker {
+    animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.2; }
+}
+
+/* broken images */
+img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+/* jitter effect */
+.jitter {
+    animation: jitter 0.15s infinite;
+}
+
+@keyframes jitter {
+    0% { transform: translate(0,0); }
+    50% { transform: translate(1px,-1px); }
+    100% { transform: translate(0,0); }
+}
+
+/* subtle layout shift */
+@keyframes shift {
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(2px); }
+}
+
+@keyframes subtleShift {
+    0%,100% { transform: skewX(-1deg); }
+    50% { transform: skewX(1deg); }
+}
+
+/* scrollable log box */
 .log {
     background: #0d1117;
     color: #c9d1d9;
     font-family: monospace;
     padding: 10px;
-    height: 200px;
-    overflow-y: auto;
+    height: 250px;
+    overflow-y: scroll;
     font-size: 12px;
     border-radius: 5px;
-}
-
-/* subtle bug: slight shifting */
-.shift {
-    animation: shift 6s infinite;
-}
-
-@keyframes shift {
-    0%,100% { transform: translateX(0); }
-    50% { transform: translateX(1px); }
-}
-
-/* fake loading glitch */
-.loading::after {
-    content: "...";
-    animation: dots 1s infinite;
-}
-
-@keyframes dots {
-    0% { content: "."; }
-    50% { content: ".."; }
-    100% { content: "..."; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">Player Management System</div>
+<div class="header jitter">Player Management System v2.4</div>
 
-<div class="container shift">
+<div class="container">
 
     <div class="sidebar">
         <div>Dashboard</div>
         <div>Players</div>
-        <div>Sessions</div>
+        <div class="flicker">Sessions</div>
         <div>Logs</div>
-        <div style="color:#ff6b6b;">API Status</div>
+        <div style="color:red;">API ERROR</div>
     </div>
 
     <div class="main">
 
         <div class="card">
-            <h3>Active Players</h3>
+            <h3>Players</h3>
             <table>
                 <tr><th>ID</th><th>Name</th><th>Status</th></tr>
-                <tr><td>1021</td><td>Ghosty</td><td class="status-ok">Online</td></tr>
-                <tr><td>1022</td><td>Nova</td><td class="status-ok">Online</td></tr>
-                <tr><td>1023</td><td>Delta</td><td class="status-bad">Sync Error</td></tr>
+                <tr><td>1021</td><td>Ghosty</td><td>Online</td></tr>
+                <tr><td>1022</td><td>Nova</td><td class="flicker">Loading</td></tr>
+                <tr><td>1023</td><td>???</td><td style="color:red;">NULL</td></tr>
+                <tr><td>1024</td><td>Delta</td><td style="color:red;">Sync Error</td></tr>
             </table>
         </div>
 
-        <div class="card">
-            <h3>API Error Log</h3>
-            <div class="log" id="logBox">
-[INFO] 12:03:11 GET /api/players 200 OK (45ms)
-[INFO] 12:03:14 GET /api/session/1021 200 OK (32ms)
-[WARN] 12:03:18 Player 1023 desync detected
-[INFO] 12:03:19 Retrying sync...
-[ERROR] 12:03:21 POST /api/player/update 500 Internal Server Error
-            </div>
+        <div class="card jitter">
+            <h3>API Log</h3>
+            <div class="log" id="logBox"></div>
         </div>
 
         <div class="card">
-            <h3>System Status</h3>
-            <p>Database: Connected</p>
-            <p>Auth Service: Connected</p>
-            <p>Player Sync: <span class="status-bad loading">Degraded</span></p>
+            <h3>Assets</h3>
+            <!-- broken image -->
+            <img src="missing_texture.png">
         </div>
 
     </div>
 
 </div>
 
+<!-- random overlapping bug -->
+<div class="overlap">FATAL: UI DESYNC</div>
+
 <script>
-// realistic API log spam
+// generate realistic API log messages
 const logBox = document.getElementById("logBox");
 
-const messages = [
-"[ERROR] POST /api/player/update 500 Internal Server Error",
-"[ERROR] Timeout: upstream service did not respond",
-"[WARN] Retry attempt #2 failed",
+const errors = [
+"[ERROR] null cant fetch Ban_ip_list",
+"[ERROR] GET /api/banlist 500 Internal Server Error",
+"[ERROR] TypeError: Cannot read properties of null (reading 'ip')",
+"[ERROR] Failed to fetch Ban_ip_list from /api/security",
 "[ERROR] UnhandledPromiseRejection: fetch failed",
-"[ERROR] Player data null reference (id:1023)",
-"[WARN] Rate limit approaching (429)",
-"[ERROR] WebSocket disconnected unexpectedly"
+"[ERROR] WebSocket connection lost (code:1006)",
+"[WARN] Retrying Ban_ip_list fetch (attempt 2)",
+"[WARN] Retrying Ban_ip_list fetch (attempt 3)",
+"[ERROR] Ban_ip_list sync aborted after 3 retries",
+"[ERROR] PlayerService: corrupted response (expected JSON, got null)",
+"[ERROR] SyntaxError: Unexpected token < in JSON at position 0",
+"[ERROR] Upstream API timeout (504 Gateway Timeout)",
+"[ERROR] Auth service returned invalid token",
+"[ERROR] Cache write failed: undefined value",
+"[WARN] Player 0 session stale",
+"[INFO] GET /api/players 200 OK",
+"[INFO] POST /api/player/update 200 OK",
+"[INFO] GET /api/session/1022 200 OK",
+"[WARN] High latency detected: 450ms",
+"[ERROR] Failed to fetch Ban_ip_list",
+"[ERROR] TypeError: Cannot read properties of null (reading 'ip')",
+"[ERROR] null cant fetch Ban_ip_list"
 ];
 
 function addLog() {
-    const time = new Date().toLocaleTimeString();
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-    logBox.innerText += `\n[${time}] ${msg}`;
+    const time = new Date().toISOString();
+    const msg = errors[Math.floor(Math.random() * errors.length)];
+    logBox.innerText += `[${time}] ${msg}\n`;
     logBox.scrollTop = logBox.scrollHeight;
 }
 
-// slowly gets worse (this is key for realism)
-setInterval(addLog, 2000);
+// flood log gradually
+setInterval(addLog, 800);
 
-// subtle corruption after time
-setTimeout(() => {
-    document.body.style.filter = "contrast(1.1) saturate(1.2)";
-}, 10000);
+// subtle UI worsening
+setTimeout(() => { document.body.style.zoom = "1.02"; }, 10000);
+setTimeout(() => { document.querySelector(".sidebar").style.width = "260px"; }, 15000);
+setTimeout(() => { document.body.style.filter = "contrast(1.1) saturate(1.2)"; }, 20000);
 </script>
 
 </body>
