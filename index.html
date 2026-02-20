@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP:SL Staff Application</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: #fff;
+    margin: 0;
+}
+
+header {
+    background: #111827;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #1f2937;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+input, textarea {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background: #374151;
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #3b82f6;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+.success {
+    text-align: center;
+    margin-top: 15px;
+    color: #22c55e;
+}
+</style>
+</head>
+<body>
+
+<header>SCP:SL Staff Application</header>
+
+<div class="container">
+    <form id="appForm">
+        <label>Discord Username</label>
+        <input type="text" id="username" required>
+
+        <label>Age</label>
+        <input type="number" id="age" required>
+
+        <label>Why do you want to be staff?</label>
+        <textarea id="reason" rows="4" required></textarea>
+
+        <label>Experience</label>
+        <textarea id="experience" rows="4" required></textarea>
+
+        <label>Hours Active Per Day</label>
+        <input type="text" id="hours" required>
+
+        <button type="submit">Submit Application</button>
+    </form>
+
+    <div class="success" id="successMsg"></div>
+</div>
+
+<script>
+const webhookURL = "https://discord.com/api/webhooks/1474318470337269784/sFdT4kfPRWfhrjoPaVO6Gjqnbp93w8JXZmRR5IKUadnWNSJgkdsxnJg-G7TJU9A2IDl1";
+
+document.getElementById("appForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const data = {
+        username: document.getElementById("username").value,
+        age: document.getElementById("age").value,
+        reason: document.getElementById("reason").value,
+        experience: document.getElementById("experience").value,
+        hours: document.getElementById("hours").value
+    };
+
+    const payload = {
+        content: "**New SCP:SL Staff Application**",
+        embeds: [{
+            title: "Application",
+            color: 3447003,
+            fields: [
+                { name: "Username", value: data.username },
+                { name: "Age", value: data.age },
+                { name: "Reason", value: data.reason },
+                { name: "Experience", value: data.experience },
+                { name: "Hours", value: data.hours }
+            ]
+        }]
+    };
+
+    await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    document.getElementById("successMsg").innerText = "Application submitted!";
+    document.getElementById("appForm").reset();
+});
+</script>
+
+</body>
+</html>
