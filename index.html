@@ -2,182 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>System Error</title>
+<title>Player Management System</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    overflow: hidden;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f1f3f6;
+    color: #222;
 }
 
-/* broken layout */
 .header {
-    background: #2c2c2c;
-    color: white;
-    padding: 15px;
-    font-size: 20px;
+    background: #1f2937;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 18px;
 }
 
-.nav {
-    background: #444;
-    color: white;
-    padding: 10px;
-}
-
-/* misaligned content */
 .container {
     display: flex;
 }
 
+/* sidebar */
 .sidebar {
-    width: 200px;
-    background: #ddd;
+    width: 220px;
+    background: #2f3542;
+    color: #ccc;
     height: 100vh;
-    overflow: hidden;
+    padding: 10px;
 }
 
-.content {
+.sidebar div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.sidebar div:hover {
+    background: #3d4450;
+}
+
+/* main */
+.main {
     flex: 1;
     padding: 20px;
 }
 
-/* glitch text */
-.glitch {
-    color: black;
-    position: relative;
-}
-
-.glitch::before,
-.glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-}
-
-.glitch::before {
-    color: red;
-    animation: glitch1 0.3s infinite;
-}
-
-.glitch::after {
-    color: blue;
-    animation: glitch2 0.3s infinite;
-}
-
-@keyframes glitch1 {
-    0% { transform: translate(0); }
-    50% { transform: translate(2px, -2px); }
-    100% { transform: translate(0); }
-}
-
-@keyframes glitch2 {
-    0% { transform: translate(0); }
-    50% { transform: translate(-2px, 2px); }
-    100% { transform: translate(0); }
-}
-
-/* flicker */
-.flicker {
-    animation: flicker 2s infinite;
-}
-
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
-
-/* fake error popup */
-.popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
+/* cards */
+.card {
     background: white;
-    border: 1px solid #999;
-    padding: 10px;
-    width: 250px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    font-size: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
 
-/* broken images */
-img {
+/* player table */
+table {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    border-collapse: collapse;
 }
 
-/* screen shift glitch */
+td, th {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.status-ok {
+    color: green;
+}
+
+.status-bad {
+    color: red;
+    font-weight: bold;
+}
+
+/* error log */
+.log {
+    background: #0d1117;
+    color: #c9d1d9;
+    font-family: monospace;
+    padding: 10px;
+    height: 200px;
+    overflow-y: auto;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+/* subtle bug: slight shifting */
 .shift {
-    animation: shift 0.2s infinite;
+    animation: shift 6s infinite;
 }
 
 @keyframes shift {
-    0% { transform: translate(0); }
-    50% { transform: translate(2px, 1px); }
-    100% { transform: translate(0); }
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(1px); }
+}
+
+/* fake loading glitch */
+.loading::after {
+    content: "...";
+    animation: dots 1s infinite;
+}
+
+@keyframes dots {
+    0% { content: "."; }
+    50% { content: ".."; }
+    100% { content: "..."; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="header glitch" data-text="Dashboard_v2.4">Dashboard_v2.4</div>
-<div class="nav">Home | Profile | Settings | ???</div>
+<div class="header">Player Management System</div>
 
 <div class="container shift">
+
     <div class="sidebar">
-        <p>Overview</p>
-        <p>Stats</p>
-        <p class="flicker">Loa̸d̴i̷n̵g̷...</p>
-        <p>Logs</p>
+        <div>Dashboard</div>
+        <div>Players</div>
+        <div>Sessions</div>
+        <div>Logs</div>
+        <div style="color:#ff6b6b;">API Status</div>
     </div>
 
-    <div class="content">
-        <h2 class="glitch" data-text="System Status">System Status</h2>
-        <p>All systems operational.</p>
-        <p class="flicker">Warning: data mismatch detected</p>
+    <div class="main">
 
-        <!-- broken image -->
-        <img src="broken_image.jpg" alt="">
+        <div class="card">
+            <h3>Active Players</h3>
+            <table>
+                <tr><th>ID</th><th>Name</th><th>Status</th></tr>
+                <tr><td>1021</td><td>Ghosty</td><td class="status-ok">Online</td></tr>
+                <tr><td>1022</td><td>Nova</td><td class="status-ok">Online</td></tr>
+                <tr><td>1023</td><td>Delta</td><td class="status-bad">Sync Error</td></tr>
+            </table>
+        </div>
 
-        <p id="corruptText">Loading data...</p>
+        <div class="card">
+            <h3>API Error Log</h3>
+            <div class="log" id="logBox">
+[INFO] 12:03:11 GET /api/players 200 OK (45ms)
+[INFO] 12:03:14 GET /api/session/1021 200 OK (32ms)
+[WARN] 12:03:18 Player 1023 desync detected
+[INFO] 12:03:19 Retrying sync...
+[ERROR] 12:03:21 POST /api/player/update 500 Internal Server Error
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>System Status</h3>
+            <p>Database: Connected</p>
+            <p>Auth Service: Connected</p>
+            <p>Player Sync: <span class="status-bad loading">Degraded</span></p>
+        </div>
+
     </div>
-</div>
 
-<div class="popup">
-    ⚠ Error 0x80072F8F<br>
-    Connection interrupted.<br>
-    Attempting recovery...
 </div>
 
 <script>
-// corrupt text effect
-const text = "Retrieving user data...";
-let i = 0;
+// realistic API log spam
+const logBox = document.getElementById("logBox");
 
-function corrupt() {
-    const el = document.getElementById("corruptText");
-    let output = "";
+const messages = [
+"[ERROR] POST /api/player/update 500 Internal Server Error",
+"[ERROR] Timeout: upstream service did not respond",
+"[WARN] Retry attempt #2 failed",
+"[ERROR] UnhandledPromiseRejection: fetch failed",
+"[ERROR] Player data null reference (id:1023)",
+"[WARN] Rate limit approaching (429)",
+"[ERROR] WebSocket disconnected unexpectedly"
+];
 
-    for (let j = 0; j < text.length; j++) {
-        if (Math.random() < 0.1) {
-            output += String.fromCharCode(33 + Math.random() * 94);
-        } else {
-            output += text[j];
-        }
-    }
-
-    el.innerText = output;
+function addLog() {
+    const time = new Date().toLocaleTimeString();
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    logBox.innerText += `\n[${time}] ${msg}`;
+    logBox.scrollTop = logBox.scrollHeight;
 }
 
-setInterval(corrupt, 100);
+// slowly gets worse (this is key for realism)
+setInterval(addLog, 2000);
 
-// random console errors (feels real)
-setInterval(() => {
-    console.error("Uncaught TypeError: undefined is not a function");
-}, 2000);
+// subtle corruption after time
+setTimeout(() => {
+    document.body.style.filter = "contrast(1.1) saturate(1.2)";
+}, 10000);
 </script>
 
 </body>
