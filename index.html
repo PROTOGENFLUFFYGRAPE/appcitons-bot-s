@@ -68,8 +68,8 @@ button:hover {
 
 <div class="container">
     <form id="appForm">
-        <label>steam id </label>
-        <input type="Text" id="steamid" required>
+        <label>Steam ID</label>
+        <input type="text" id="steamid" required>
         
         <label>Discord Username</label>
         <input type="text" id="username" required>
@@ -93,12 +93,13 @@ button:hover {
 </div>
 
 <script>
-const webhookURL = "https://discord.com/api/webhooks/1474318470337269784/sFdT4kfPRWfhrjoPaVO6Gjqnbp93w8JXZmRR5IKUadnWNSJgkdsxnJg-G7TJU9A2IDl1";
+const webhookURL = "https://discord.com/api/webhooks/1474318470337269784/sFdT4kfPRWfhrjoPaVO6Gjqnbp93w8JXZmRR5IKUadnWNSJgkdsxnJg-G7TJU9A2IDl1"; 
 
 document.getElementById("appForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const data = {
+        steamid: document.getElementById("steamid").value,
         username: document.getElementById("username").value,
         age: document.getElementById("age").value,
         reason: document.getElementById("reason").value,
@@ -112,8 +113,8 @@ document.getElementById("appForm").addEventListener("submit", async function(e) 
             title: "Application",
             color: 3447003,
             fields: [
+                { name: "Steam ID", value: data.steamid },
                 { name: "Username", value: data.username },
-                { name: "steam id", vaule: data steam id },
                 { name: "Age", value: data.age },
                 { name: "Reason", value: data.reason },
                 { name: "Experience", value: data.experience },
@@ -122,14 +123,18 @@ document.getElementById("appForm").addEventListener("submit", async function(e) 
         }]
     };
 
-    await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
+    try {
+        await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-    document.getElementById("successMsg").innerText = "Application submitted!";
-    document.getElementById("appForm").reset();
+        document.getElementById("successMsg").innerText = "Application submitted!";
+        document.getElementById("appForm").reset();
+    } catch (error) {
+        document.getElementById("successMsg").innerText = "Error sending application.";
+    }
 });
 </script>
 
