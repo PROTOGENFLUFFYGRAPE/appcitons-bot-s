@@ -2,206 +2,140 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Player Management System - Broken</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP:SL Staff Application</title>
+
 <style>
 body {
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: #fff;
     margin: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    
 }
 
-/* header bug */
-.header {
-    
-    left: -5px;
-    width: 110%;
-    transform: rotate(-1deg);
+header {
+    background: #111827;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-/* container broken */
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
+    max-width: 700px;
+    margin: 40px auto;
+    background: #1f2937;
+    padding: 25px;
+    border-radius: 10px;
 }
 
-/* sidebar glitch */
-.sidebar {
-    width: 220px;
-    background: #2f3542;
-    color: #ccc;
-  
-    left: -20px;
-    transform: rotate(2deg) skewX(-2deg);
-}
-
-.sidebar div {
-    padding: 8px;
-    position: relative;
-    left: calc(5px * (Math.random()));
-}
-
-
-
-/* main content */
-.main {
-    flex: 1;
-    padding: 15px;
-    psolute;
-    top: 60px;
-    left: 200px;
-    width: calc(100% - 200px);
-}
-
-/* cards breaking */
-.card {
-    background: white;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-
-    top: calc(10px * (Math.random()));
-    left: calc(10px * (Math.random()));
-    transform: rotate(calc(-2deg + 4deg * (Math.random())));
-}
-
-/* table broken */
-table {
+input, textarea {
     width: 100%;
-    border-collapse: collapse;
-}
-
-td, th {
-    padding: 8px;
-    border-bottom: 1px dashed #ddd;
-    position: relative;
-    left: calc(5px * (Math.random()));
-}
-
-/* overlapping text bug */
-.overlap {
-    position: absolute;
-    top: 150px;
-   
-    font-size: 16px;
-    transform: rotate(-5deg);
-}
-
-/* flicker bug */
-.flicker {
-    animation: flicker 1.5s infinite;
-}
-
-@keyframes flicker {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.2; }
-}
-
-/* broken images */
-img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    transform: rotate(calc(-3deg + 6deg * (Math.random())));
-}
-
-/* jitter */
-.jitter {
-    animation: jitter 0.15s infinite;
-}
-
-@keyframes jitter {
-    0% { transform: translate(0,0); }
-    50% { transform: translate(1px,-1px); }
-    100% { transform: translate(0,0); }
-}
-
-/* log box */
-.log {
-    background: #0d1117;
-    color: #c9d1d9;
-    font-family: monospace;
+    margin-top: 10px;
+    margin-bottom: 20px;
     padding: 10px;
-    height: 250px;
-    overflow-y: scroll;
-    font-size: 12px;
-    border-radius: 5px;
-    transform: skewX(-2deg) rotate(-1deg);
+    border-radius: 6px;
+    border: none;
+    background: #374151;
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #3b82f6;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+.success {
+    text-align: center;
+    margin-top: 15px;
+    color: #22c55e;
 }
 </style>
 </head>
 <body>
 
-<div class="header jitter">PLAYERLIST-BANIG </div>
+<header>SCP:SL Staff Application</header>
 
 <div class="container">
+    <form id="appForm">
+        <label>Steam ID</label>
+        <input type="text" id="steamid" required>
+        
+        <label>Discord Username</label>
+        <input type="text" id="username" required>
 
-    <div class="sidebar">
-        <div>Dashboard</div>
-        <div>Players</div>
-        <div class="flicker">Sessions</div>
-        <div>Logs</div>
-        <div stylv>
-    </div>
+        <label>Age</label>
+        <input type="number" id="age" required>
 
-    <div class="main">
+        <label>Why do you want to be staff?</label>
+        <textarea id="reason" rows="4" required></textarea>
 
-        <div class="card">
-            <h3>Players</h3>
-            <table>
-                <tr><th>ID</th><th>Name</th><th>Status</th></tr>
-                <tr><td>1021</td><td>Ghosty</td><td>Online</td></tr>
-                
-                <tr><td>1023</td><td>???</td><td style="color:red;">NULL</td></tr>
-                <tr><td>1024</td><td>Delta</td><td style="color:red;">Sync Error</td></tr>
-            </table>
-        </div>
+        <label>Experience</label>
+        <textarea id="experience" rows="4" required></textarea>
 
-        <div class="card jitter">
-            <h3>API Log</h3>
-            <div class="log" id="logBox"></div>
-        </div>
+        <label>Hours Active Per Day</label>
+        <input type="text" id="hours" required>
 
-        <div class="card">
-            <h3>Assets</h3>
-            <img src="missing_texture.png">
-        </div>
+        <button type="submit">Submit Application</button>
+    </form>
 
-    </div>
-
+    <div class="success" id="successMsg"></div>
 </div>
 
-<div class="overlap">FATAL: UI DESYNC</div>
-
 <script>
-// realistic API log messages
-const logBox = document.getElementById("logBox");
-const errors = [
-"[ERROR] null cant fetch Ban_ip_list",
-"[ERROR] GET /api/banlist 500 Internal Server Error",
-"
-"[INFO] GET /api/players 200 OK",
-"[INFO] POST /api/player/update 200 OK",
-"[INFO] GET /api/session/1022 200 OK",
-"[WARN] High latency detected: 450ms",
-"[ERROR] Failed to fetch Ban_ip_list",
-"[ERROR] TypeError: Cannot read properties of null (reading 'ip')",
-"[ERROR] null cant fetch Ban_ip_list"
-];
+const webhookURL = "NOT ADDED UNTIL I GET CLOUD FLARE HOSTED"; // ⚠️ Replace this
 
-function addLog() {
-    const time = new Date().toISOString();
-    const msg = errors[Math.floor(Math.random() * errors.length)];
-    logBox.innerText += `[${time}] ${msg}\n`;
-    logBox.scrollTop = logBox.scrollHeight;
-}
+document.getElementById("appForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
 
-setInterval(addLog, 800);
+    const data = {
+        steamid: document.getElementById("steamid").value,
+        username: document.getElementById("username").value,
+        age: document.getElementById("age").value,
+        reason: document.getElementById("reason").value,
+        experience: document.getElementById("experience").value,
+        hours: document.getElementById("hours").value
+    };
 
-// progressively break layout
-setTimeout(() => { document.querySelector(".sidebar").style.left = "-40px"; }, 8000);
-setTimeout(() => { document.querySelector(".main").style.left = "220px"; }, 10000);
-setTimeout(() => { document.body.style.zoom = "1.02"; }, 12000);
+    const payload = {
+        content: "**New SCP:SL Staff Application**",
+        embeds: [{
+            title: "Application",
+            color: 3447003,
+            fields: [
+                { name: "Steam ID", value: data.steamid },
+                { name: "Username", value: data.username },
+                { name: "Age", value: data.age },
+                { name: "Reason", value: data.reason },
+                { name: "Experience", value: data.experience },
+                { name: "Hours", value: data.hours }
+            ]
+        }]
+    };
+
+    try {
+        await fetch(webhookURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        document.getElementById("successMsg").innerText = "Application submitted!";
+        document.getElementById("appForm").reset();
+    } catch (error) {
+        document.getElementById("successMsg").innerText = "Error sending application.";
+    }
+});
 </script>
 
 </body>
