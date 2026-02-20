@@ -68,6 +68,9 @@ button:hover {
 
 <div class="container">
     <form id="appForm">
+        <label>steam id </label>
+        <input type="Text" id="steamid" required>
+        
         <label>Discord Username</label>
         <input type="text" id="username" required>
 
@@ -110,6 +113,7 @@ document.getElementById("appForm").addEventListener("submit", async function(e) 
             color: 3447003,
             fields: [
                 { name: "Username", value: data.username },
+                { name: "steam id", vaule: data steam id },
                 { name: "Age", value: data.age },
                 { name: "Reason", value: data.reason },
                 { name: "Experience", value: data.experience },
